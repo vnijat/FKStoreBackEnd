@@ -3,8 +3,9 @@ import { ConnectionOptions } from 'typeorm';
 const config: ConnectionOptions = {
   url: process.env.DATABASE_URL,
   type: 'postgres',
-  ssl: true,
-  //   host: 'localhost',
+  ssl: {
+    rejectUnauthorized: false,
+  }, //   host: 'localhost',
   //   port: 5432,
   //   username: 'fkstore',
   //   password: 'n24i8cat',
