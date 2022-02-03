@@ -3,10 +3,12 @@ import { CategoriesEntity } from 'src/categories/categories.entity';
 import {
   BeforeUpdate,
   Column,
+  CreateDateColumn,
   Entity,
   JoinColumn,
   ManyToOne,
   PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 
 @Entity({ name: 'items' })
@@ -16,6 +18,12 @@ export class ItemEntity {
 
   @Column({ name: 'name' })
   name: string;
+
+  @Column({ name: 'photo_path', nullable: true })
+  photoPath: string;
+
+  @Column({ nullable: true })
+  color: string;
 
   @Column({ name: 'description', default: '' })
   description: string;
@@ -43,14 +51,9 @@ export class ItemEntity {
   @Column({ name: 'supplier', default: 'unknown' })
   supplier: string;
 
-  @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
+  @CreateDateColumn()
   createdAt: Date;
 
-  @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
+  @UpdateDateColumn()
   updatedAt: Date;
-
-  @BeforeUpdate()
-  updateTimeStamp() {
-    this.updatedAt = new Date();
-  }
 }

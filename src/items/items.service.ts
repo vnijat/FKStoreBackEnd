@@ -5,6 +5,7 @@ import { AddItemDto } from './dto/addItem.dto';
 import { CategoriesEntity } from '../categories/categories.entity';
 import { ItemEntity } from './items.entity';
 import { BarCodeEntity } from 'src/barcode/barcode.entity';
+import { extname } from 'path';
 
 @Injectable()
 export class ItemsServices {
@@ -23,6 +24,13 @@ export class ItemsServices {
       .leftJoinAndSelect('items.barCode', 'barCode')
       .leftJoinAndSelect('items.category', 'category');
 
+    const itemsCount = await queryBuilder.getCount();
+    if (query.limit) {
+      queryBuilder.take(query.limit);
+    }
+    if (query.offset) {
+      queryBuilder.skip(query.offset);
+    }
     if (query.barCode) {
       const barCode = await this.barCodeRepositery.findOne({
         code: query.barCode,
@@ -31,7 +39,6 @@ export class ItemsServices {
         id: barCode.id,
       });
     }
-
     if (query.category) {
       const category = await this.categoryRepositery.findOne({
         title: query.category,
@@ -40,33 +47,28 @@ export class ItemsServices {
         categoryID: category.id,
       });
     }
-
     queryBuilder.orderBy('items.createdAt', 'DESC');
-
-    const itemsCount = await queryBuilder.getCount();
-
     const items = await queryBuilder.getMany();
-
     return { items: items, itemsCount };
   }
 
-  async addItem(addItemDto: AddItemDto): Promise<ItemEntity> {
+  async addItem(
+    addItemDto: AddItemDto,
+    photoPath: string,
+  ): Promise<ItemEntity> {
     let barCode: BarCodeEntity;
     let category: CategoriesEntity;
-
     category = await this.categoryRepositery.findOne({
       title: addItemDto.category,
     });
     barCode = await this.barCodeRepositery.findOne({
       code: addItemDto.barCode,
     });
-
     if (!barCode) {
       barCode = new BarCodeEntity();
       barCode.code = addItemDto.barCode;
       barCode = await this.barCodeRepositery.save(barCode);
     }
-
     if (!category) {
       category = new CategoriesEntity();
       category.title = addItemDto.category;
@@ -76,7 +78,19 @@ export class ItemsServices {
     Object.assign(item, addItemDto);
     item.barCode = barCode;
     item.category = category;
-
+    if (photoPath) {
+      item.photoPath = photoPath;
+    }
     return await this.itemRepository.save(item);
+  }
+
+  async deleteMany(Ids: number[]) {
+    await this.itemRepository
+      .createQueryBuilder()
+      .delete()
+      .where('id IN (:...Ids)', {
+        Ids,
+      })
+      .execute();
   }
 }

@@ -38,8 +38,11 @@ export class AddItemDto {
 
   @IsNotEmpty()
   readonly category: string;
-  
+
   @IsNotEmpty()
   @IsNumber()
   readonly quantity: number;
+
+  @IsOptional()
+  readonly photoPath: string;
 }
