@@ -23,6 +23,7 @@ node_modules/
 tmp/
 temp/
 $RECYCLE.BIN/
+photos/
 .DS_Store
 Thumbs.db
 UserInterfaceState.xcuserstate
