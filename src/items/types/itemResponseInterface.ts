@@ -1,4 +1,4 @@
-import { ItemEntity } from '../items.entity';
+import { ItemEntity } from '../item.entity';
 
 export interface itemResponseInterface {
   item: ItemEntity;

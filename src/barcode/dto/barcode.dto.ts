@@ -1,3 +1,3 @@
-export class BarCodeDto {
+export class AddBarcodeDto {
   readonly code: string;
 }

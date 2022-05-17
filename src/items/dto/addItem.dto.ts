@@ -4,45 +4,55 @@ import {
   IsNumber,
   IsNumberString,
   IsOptional,
+  isString,
   IsString,
 } from 'class-validator';
 
 export class AddItemDto {
   @IsNotEmpty()
-  @IsString()
+  /**
+   * Item Name
+   */
   readonly name: string;
-
   @IsOptional()
   @IsString()
+  /**
+   * Item description
+   */
   readonly description: string;
+
+  @IsNumberString()
+  readonly barcodeId: number;
 
   @IsNotEmpty()
   @IsNumberString()
-  readonly barCode: string;
-
-  @IsOptional()
-  @IsNumber()
   readonly purchasePrice: number;
 
-  @IsOptional()
-  @IsNumber()
-  readonly stockPrice: number;
-
-  @IsOptional()
-  @IsString()
-  readonly supplier: string;
-
-  @IsOptional()
-  @IsString()
-  readonly unit: string;
+  @IsNotEmpty()
+  @IsNumberString()
+  readonly pricePerUnit: number;
 
   @IsNotEmpty()
-  readonly category: string;
+  @IsNumberString()
+  readonly supplierId: number;
 
   @IsNotEmpty()
-  @IsNumber()
+  @IsNumberString()
+  readonly unitId: number;
+
+  @IsNotEmpty()
+  @IsNumberString()
+  readonly categoryId: number;
+
+  @IsNotEmpty()
+  @IsNumberString()
+  readonly storeId: number;
+
+  @IsNotEmpty()
+  @IsNumberString()
+  readonly locationId: number;
+
+  @IsNotEmpty()
+  @IsNumberString()
   readonly quantity: number;
-
-  @IsOptional()
-  readonly photoPath: string;
 }
