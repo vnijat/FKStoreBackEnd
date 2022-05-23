@@ -15,8 +15,6 @@ export class PageMetaDto {
 
   readonly hasNextPage: boolean;
 
-  readonly orderBy: { sort: string; order: Order };
-
   constructor({
     queryParamsDto,
     itemCount,
@@ -24,8 +22,8 @@ export class PageMetaDto {
     queryParamsDto: QueryParamsDto;
     itemCount: number;
   }) {
-    this.page = queryParamsDto.page;
-    this.take = queryParamsDto.take;
+    this.page = Number(queryParamsDto?.page);
+    this.take = Number(queryParamsDto.take);
     this.itemCount = itemCount;
     this.pageCount = Math.ceil(this.itemCount / this.take);
     this.hasPreviousPage = this.page > 1;

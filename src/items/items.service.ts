@@ -88,9 +88,8 @@ export class ItemsServices {
         });
       }
     }
-
     queryBuilder.orderBy(sort, order);
-
+    
     const [items, itemCount] = await queryBuilder.getManyAndCount();
     const pageMetaDto = new PageMetaDto({
       queryParamsDto,
