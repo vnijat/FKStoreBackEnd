@@ -4,7 +4,9 @@ import { BarcodeEntity } from './barcode/barcode.entity';
 import { CategoryEntity } from './categories/category.entity';
 import { ClientEntity } from './clients/entities/client.entity';
 import { ClientOrderEntity } from './clients/entities/client.order.entity';
+import { ColorEntity } from './items/color.entity';
 import { ItemEntity } from './items/item.entity';
+import { LabelEntity } from './items/label.entity';
 import { LocationEntity } from './locations/location.entity';
 import { OrderItemEntity } from './orders/entities/orderItem.entity';
 import { OrderEntity } from './orders/entities/orders.entity';
@@ -64,6 +66,8 @@ export const adminjSConfig = {
       StoreEntity,
       SupplierEntity,
       UnitEntity,
+      ColorEntity,
+      LabelEntity,
     ],
     locale: {
       language: 'en',
@@ -82,6 +86,8 @@ export const adminjSConfig = {
           StoreEntity: 'Stores',
           SupplierEntity: 'Suppliers',
           UnitEntity: 'Units',
+          ColorEntity:'Colors',
+          LabelEntity:'Labels'
         },
       },
     },

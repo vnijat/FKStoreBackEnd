@@ -13,12 +13,18 @@ import { EditItemDto } from './dto/editItem.dto';
 import { QueryParamsDto } from './dto/queryParams.dto';
 import { QueryResponseDto } from './dto/queryResponse.dto';
 import { PageMetaDto } from './dto/pageMeta.dto';
+import { ColorEntity } from './color.entity';
+import { LabelEntity } from './label.entity';
 
 @Injectable()
 export class ItemsServices {
   constructor(
     @InjectRepository(ItemEntity)
     private readonly itemRepository: Repository<ItemEntity>,
+    @InjectRepository(ColorEntity)
+    private readonly colorRepository: Repository<ColorEntity>,
+    @InjectRepository(LabelEntity)
+    private readonly labelRepository: Repository<LabelEntity>,
     private readonly categoriesService: CategoriesService,
     private readonly barCodeService: BarCodeService,
     private readonly storesService: StoresService,
@@ -111,8 +117,16 @@ export class ItemsServices {
     photoPath: string,
   ): Promise<ItemEntity> {
     const item = new ItemEntity();
-    const { barcodeId, categoryId, unitId, supplierId, storeId, locationId } =
-      addItemDto;
+    const {
+      barcodeId,
+      categoryId,
+      unitId,
+      supplierId,
+      storeId,
+      locationId,
+      colorId,
+      labelId,
+    } = addItemDto;
     Object.assign(item, addItemDto);
     item.barcode = await this.barCodeService.findByid(barcodeId);
     item.category = await this.categoriesService.findByid(categoryId);
@@ -120,10 +134,49 @@ export class ItemsServices {
     item.unit = await this.unitService.findByid(unitId);
     item.supplier = await this.suppliersService.findById(supplierId);
     item.location = await this.locationService.findByid(locationId);
+    item.color = await this.findColorByid(colorId);
+    item.label = await this.findLabelByid(labelId);
+
     if (photoPath) {
       item.photoName = photoPath;
     }
     return await this.itemRepository.save(item);
+  }
+
+  async findColorByid(id: number) {
+    const color = await this.colorRepository.findOne({ id });
+    if (!color) {
+      throw new HttpException(
+        'there is no Color with this id',
+        HttpStatus.NOT_ACCEPTABLE,
+      );
+    }
+    return color;
+  }
+
+  async findLabelByid(id: number) {
+    const label = await this.labelRepository.findOne({ id });
+    if (!label) {
+      throw new HttpException(
+        'there is no label with this id',
+        HttpStatus.NOT_ACCEPTABLE,
+      );
+    }
+    return label;
+  }
+
+  async getColorForInput() {
+    return await this.colorRepository
+      .createQueryBuilder()
+      .select(['id AS id', 'name AS label'])
+      .getRawMany();
+  }
+
+  async getLabelForInput() {
+    return await this.labelRepository
+      .createQueryBuilder()
+      .select(['id AS id', 'name AS label'])
+      .getRawMany();
   }
 
   async getInputs() {
@@ -133,8 +186,9 @@ export class ItemsServices {
     const unit = await this.unitService.getUnitsForInput();
     const supplier = await this.suppliersService.getSuppliersForInput();
     const location = await this.locationService.getLocationsForInput();
-
-    return { barcode, category, store, unit, supplier, location };
+    const color = await this.getColorForInput();
+    const label = await this.getLabelForInput();
+    return { barcode, category, store, unit, supplier, location, color, label };
   }
 
   async deleteMany(Ids: number[]) {

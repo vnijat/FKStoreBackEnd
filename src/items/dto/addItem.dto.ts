@@ -26,6 +26,10 @@ export class AddItemDto {
 
   @IsNotEmpty()
   @IsNumberString()
+  readonly colorId: number;
+
+  @IsNotEmpty()
+  @IsNumberString()
   readonly purchasePrice: number;
 
   @IsNotEmpty()
@@ -55,4 +59,8 @@ export class AddItemDto {
   @IsNotEmpty()
   @IsNumberString()
   readonly quantity: number;
+
+  @IsNotEmpty()
+  @IsNumberString()
+  readonly labelId: number;
 }

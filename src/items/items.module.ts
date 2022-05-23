@@ -9,10 +9,12 @@ import { UnitsModule } from 'src/units/units.module';
 import { StoresModule } from 'src/stores/stores.module';
 import { LocationsModule } from 'src/locations/locations.module';
 import { BarCodeModule } from 'src/barcode/barcode.module';
+import { ColorEntity } from './color.entity';
+import { LabelEntity } from './label.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([ItemEntity]),
+    TypeOrmModule.forFeature([ItemEntity, ColorEntity, LabelEntity]),
     SuppliersModule,
     CategoriesModule,
     UnitsModule,
