@@ -81,12 +81,7 @@ export class ItemsServices {
     if (skip) {
       queryBuilder.skip(skip);
     }
-    if (!!search?.length) {
-      queryBuilder
-        .andWhere('item.name ILIKE :search', { search: `%${search}%` })
-        .orWhere('item.description ILIKE :search', { search: `%${search}%` });
-    }
-
+    
     for (let keyName in filterParams) {
       if (filterParams[keyName]) {
         const arrayOfIds = filterParams[keyName].split(',');
@@ -95,6 +90,13 @@ export class ItemsServices {
         });
       }
     }
+
+    if (!!search?.length) {
+      queryBuilder
+        .andWhere('item.name ILIKE :search', { search: `%${search}%` })
+        .orWhere('item.description ILIKE :search', { search: `%${search}%` });
+    }
+    
     queryBuilder.orderBy(sort, order);
 
     const [items, itemCount] = await queryBuilder.getManyAndCount();
