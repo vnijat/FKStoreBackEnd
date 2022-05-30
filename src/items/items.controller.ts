@@ -70,19 +70,17 @@ export class ItemsController {
   }
 
   @Post()
-  @UseInterceptors(
-    FileInterceptor('photo', {
-      storage: diskStorage({
-        destination: './photos',
-        filename: generateFileName,
-      }),
-    }),
-  )
+  @UseInterceptors()
+  // FileInterceptor('photo', {
+  //   storage: diskStorage({
+  //     destination: './photos',
+  //     filename: generateFileName,
+  //   }),
+  // }),
   async addItem(
-    @UploadedFile() photo: Express.Multer.File,
-    @Body('item', new ParseJsonPipe(), new ValidationPipe())
+    @Body(new ValidationPipe())
     addItemDto: AddItemDto,
   ) {
-    return await this.itemsServices.addItem(addItemDto, photo?.filename);
+    return await this.itemsServices.addItem(addItemDto);
   }
 }

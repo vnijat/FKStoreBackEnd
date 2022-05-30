@@ -60,6 +60,7 @@ export class ItemsServices {
       search,
       sort,
       order,
+      labelId,
     } = queryParamsDto;
 
     const filterParams = {
@@ -69,6 +70,7 @@ export class ItemsServices {
       unitId,
       locationId,
       storeId,
+      labelId,
     };
 
     const orderBy = { sort, order };
@@ -79,7 +81,6 @@ export class ItemsServices {
     if (skip) {
       queryBuilder.skip(skip);
     }
-
     if (!!search?.length) {
       queryBuilder
         .andWhere('item.name ILIKE :search', { search: `%${search}%` })
@@ -95,7 +96,7 @@ export class ItemsServices {
       }
     }
     queryBuilder.orderBy(sort, order);
-    
+
     const [items, itemCount] = await queryBuilder.getManyAndCount();
     const pageMetaDto = new PageMetaDto({
       queryParamsDto,
@@ -111,10 +112,7 @@ export class ItemsServices {
     );
   }
 
-  async addItem(
-    addItemDto: AddItemDto,
-    photoPath: string,
-  ): Promise<ItemEntity> {
+  async addItem(addItemDto: AddItemDto): Promise<ItemEntity> {
     const item = new ItemEntity();
     const {
       barcodeId,
@@ -136,9 +134,6 @@ export class ItemsServices {
     item.color = await this.findColorByid(colorId);
     item.label = await this.findLabelByid(labelId);
 
-    if (photoPath) {
-      item.photoName = photoPath;
-    }
     return await this.itemRepository.save(item);
   }
 

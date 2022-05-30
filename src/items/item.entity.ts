@@ -21,9 +21,6 @@ export class ItemEntity extends common {
   @Column({ name: 'name' })
   name: string;
 
-  @Column({ name: 'photo_name', nullable: true })
-  photoName: string;
-
   @ManyToOne(() => ColorEntity, (color) => color.items)
   color: ColorEntity;
 

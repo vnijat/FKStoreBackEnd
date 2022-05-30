@@ -36,6 +36,9 @@ export class QueryParamsDto {
   @IsOptional()
   readonly storeId?: string;
 
+  @IsOptional()
+  readonly labelId?: string;
+
   get skip(): number {
     return (this.page - 1) * this.take;
   }
