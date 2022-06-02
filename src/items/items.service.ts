@@ -41,6 +41,7 @@ export class ItemsServices {
       .addSelect('item.createdAt')
       .leftJoinAndSelect('item.barcode', 'barcode')
       .leftJoinAndSelect('item.category', 'category')
+      .leftJoinAndSelect('item.color', 'color')
       .leftJoinAndSelect('item.supplier', 'supplier')
       .leftJoinAndSelect('item.unit', 'unit')
       .leftJoinAndSelect('item.location', 'location')
@@ -81,7 +82,7 @@ export class ItemsServices {
     if (skip) {
       queryBuilder.skip(skip);
     }
-    
+
     for (let keyName in filterParams) {
       if (filterParams[keyName]) {
         const arrayOfIds = filterParams[keyName].split(',');
@@ -96,7 +97,7 @@ export class ItemsServices {
         .andWhere('item.name ILIKE :search', { search: `%${search}%` })
         .orWhere('item.description ILIKE :search', { search: `%${search}%` });
     }
-    
+
     queryBuilder.orderBy(sort, order);
 
     const [items, itemCount] = await queryBuilder.getManyAndCount();
@@ -135,8 +136,10 @@ export class ItemsServices {
     item.location = await this.locationService.findByid(locationId);
     item.color = await this.findColorByid(colorId);
     item.label = await this.findLabelByid(labelId);
-
-    return await this.itemRepository.save(item);
+    const newItem = await this.itemRepository.save(item);
+    newItem.skuCode =
+      `${newItem.supplier.skuCode}-${newItem.category.skuCode}-${newItem.color.skuCode}-${newItem.label.skuCode}-${newItem.id}`.toUpperCase();
+    return await this.itemRepository.save(newItem);
   }
 
   async findColorByid(id: number) {

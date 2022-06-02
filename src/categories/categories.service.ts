@@ -13,7 +13,7 @@ export class CategoriesService {
   ) {}
 
   async addCategory(addCategory: AddCategoryDto): Promise<CategoryEntity> {
-    const { name, parentCategoryId } = addCategory;
+    const { title, parentCategoryId } = addCategory;
     const newCategory = new CategoryEntity();
     const parentCategory = await this.categoryRepository.findOne({
       id: parentCategoryId,
@@ -21,7 +21,7 @@ export class CategoriesService {
     if (parentCategory) {
       newCategory.parent = parentCategory;
     }
-    newCategory.title = name;
+    newCategory.title = title;
     return await this.categoryRepository.save(newCategory);
   }
 

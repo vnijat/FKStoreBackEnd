@@ -2,16 +2,12 @@
 import { common } from 'src/common/base.entity';
 import { ItemEntity } from 'src/items/item.entity';
 import {
-  BaseEntity,
   Column,
-  CreateDateColumn,
   Entity,
   OneToMany,
-  PrimaryGeneratedColumn,
   Tree,
   TreeChildren,
   TreeParent,
-  UpdateDateColumn,
 } from 'typeorm';
 
 @Entity({ name: 'category' })
