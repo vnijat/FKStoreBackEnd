@@ -1,6 +1,6 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { getRepository, Repository } from 'typeorm';
+import { Brackets, getRepository, Repository } from 'typeorm';
 import { AddItemDto } from './dto/addItem.dto';
 import { ItemEntity } from './item.entity';
 import { CategoriesService } from 'src/categories/categories.service';
@@ -84,7 +84,7 @@ export class ItemsServices {
     }
 
     for (let keyName in filterParams) {
-      if (filterParams[keyName]) {
+      if (filterParams[keyName].length) {
         const arrayOfIds = filterParams[keyName].split(',');
         queryBuilder.andWhere(`item.${keyName} IN(:...${keyName})`, {
           [keyName]: arrayOfIds,
@@ -93,10 +93,21 @@ export class ItemsServices {
     }
 
     if (!!search?.length) {
-      queryBuilder
-        .andWhere('item.name ILIKE :search', { search: `%${search}%` })
-        .orWhere('item.description ILIKE :search', { search: `%${search}%` });
+      queryBuilder.andWhere(
+        new Brackets((qb) => {
+          qb.andWhere('item.name ILIKE :search', {
+            search: `%${search}%`,
+          });
+          qb.orWhere('item.description ILIKE :search', {
+            search: `%${search}%`,
+          });
+        }),
+      );
+      // queryBuilder
+      //   .andWhere('item.name ILIKE :search', { search: `%${search}%` })
+      //   .orWhere('item.description ILIKE :search', { search: `%${search}%` });
     }
+
 
     queryBuilder.orderBy(sort, order);
 
