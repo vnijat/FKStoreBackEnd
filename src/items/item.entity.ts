@@ -7,12 +7,7 @@ import { PurchaseItemEntity } from 'src/purchases/entities/purchaseItem.entity';
 import { StoreEntity } from 'src/stores/store.entity';
 import { SupplierEntity } from 'src/suppliers/supplier.entity';
 import { UnitEntity } from 'src/units/unit.entity';
-import {
-  Column,
-  Entity,
-  ManyToOne,
-  OneToMany,
-} from 'typeorm';
+import { AfterLoad, Column, Entity, ManyToOne, OneToMany } from 'typeorm';
 import { ColorEntity } from './color.entity';
 import { LabelEntity } from './label.entity';
 
@@ -51,6 +46,15 @@ export class ItemEntity extends common {
   @ManyToOne(() => UnitEntity, (unit) => unit.items)
   unit: UnitEntity;
 
+  @Column({
+    name: 'total_price',
+    default: 0,
+    type: 'decimal',
+    precision: 19,
+    scale: 3,
+  })
+  totalPrice: number;
+
   @ManyToOne(() => CategoryEntity, (category) => category.items, {
     eager: true,
   })
@@ -80,4 +84,5 @@ export class ItemEntity extends common {
 
   @OneToMany(() => PurchaseItemEntity, (purchaseItem) => purchaseItem.item)
   purchase: PurchaseItemEntity[];
+
 }

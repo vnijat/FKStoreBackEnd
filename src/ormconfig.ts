@@ -1,4 +1,5 @@
 import { ConnectionOptions } from 'typeorm';
+import { ItemSubscriber } from './items/subscribers/itemEntitySubscriber';
 
 const config: ConnectionOptions = {
   //   url: process.env.DATABASE_URL,
@@ -18,6 +19,7 @@ const config: ConnectionOptions = {
   cli: {
     migrationsDir: 'src/migrations',
   },
+  subscribers: [ItemSubscriber],
 };
 
 export default config;

@@ -1,55 +1,69 @@
-import { IsNotEmpty, IsNumberString, IsOptional, IsString } from "class-validator";
+import {
+  IsNotEmpty,
+  IsNumberString,
+  IsOptional,
+  IsString,
+} from 'class-validator';
 
 export class EditItemDto {
-    @IsNotEmpty()
-    /**
-     * Item Name
-     */
-    readonly name: string;
-    @IsOptional()
-    @IsString()
-    /**
-     * Item description
-     */
-    readonly description: string;
-  
-    @IsNotEmpty()
-    /**
-     * Barcde id
-     */
-    @IsNumberString()
-    readonly barcodeId: number;
-  
-    @IsNotEmpty()
-    @IsNumberString()
-    readonly purchasePrice: number;
-  
-    @IsNotEmpty()
-    @IsNumberString()
-    readonly pricePerUnit: number;
-  
-    @IsNotEmpty()
-    @IsNumberString()
-    readonly supplierId: number;
-  
-    @IsNotEmpty()
-    @IsNumberString()
-    readonly unitId: number;
-  
-    @IsNotEmpty()
-    @IsNumberString()
-    readonly categoryId: number;
-  
-    @IsNotEmpty()
-    @IsNumberString()
-    readonly storeId: number;
-  
-    @IsNotEmpty()
-    @IsNumberString()
-    readonly locationId: number;
-  
-    @IsNotEmpty()
-    @IsNumberString()
-    readonly quantity: number;
-  }
-  
+  @IsOptional()
+  @IsNotEmpty()
+  /**
+   * Item Name
+   */
+  readonly name: string;
+  @IsOptional()
+  @IsString()
+  /**
+   * Item description
+   */
+  readonly description: string;
+
+  @IsOptional()
+  @IsNotEmpty()
+  /**
+   * Barcde id
+   */
+  @IsNumberString()
+  readonly barcodeId: number;
+
+  @IsOptional()
+  @IsNotEmpty()
+  @IsNumberString()
+  readonly purchasePrice: number;
+
+  @IsOptional()
+  @IsNotEmpty()
+  @IsNumberString()
+  readonly pricePerUnit: number;
+
+  @IsOptional()
+  @IsNotEmpty()
+  @IsNumberString()
+  readonly supplierId: number;
+
+  @IsOptional()
+  @IsNotEmpty()
+  @IsNumberString()
+  readonly unitId: number;
+
+  @IsOptional()
+  @IsNotEmpty()
+  @IsNumberString()
+  readonly categoryId: number;
+
+  @IsOptional()
+  @IsNotEmpty()
+  @IsNumberString()
+  readonly storeId: number;
+
+  @IsOptional()
+  @IsNotEmpty()
+  @IsNumberString()
+  readonly locationId: number;
+
+  @IsOptional()
+  @IsNotEmpty()
+  @IsNumberString()
+  readonly quantity: number;
+}

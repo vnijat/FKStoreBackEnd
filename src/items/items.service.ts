@@ -84,7 +84,7 @@ export class ItemsServices {
     }
 
     for (let keyName in filterParams) {
-      if (filterParams[keyName].length) {
+      if (filterParams[keyName]?.length) {
         const arrayOfIds = filterParams[keyName].split(',');
         queryBuilder.andWhere(`item.${keyName} IN(:...${keyName})`, {
           [keyName]: arrayOfIds,
@@ -107,7 +107,6 @@ export class ItemsServices {
       //   .andWhere('item.name ILIKE :search', { search: `%${search}%` })
       //   .orWhere('item.description ILIKE :search', { search: `%${search}%` });
     }
-
 
     queryBuilder.orderBy(sort, order);
 
@@ -147,6 +146,7 @@ export class ItemsServices {
     item.location = await this.locationService.findByid(locationId);
     item.color = await this.findColorByid(colorId);
     item.label = await this.findLabelByid(labelId);
+    item.totalPrice = addItemDto.pricePerUnit * addItemDto.quantity;
     const newItem = await this.itemRepository.save(item);
     newItem.skuCode =
       `${newItem.supplier.skuCode}-${newItem.category.skuCode}-${newItem.color.skuCode}-${newItem.label.skuCode}-${newItem.id}`.toUpperCase();
@@ -214,6 +214,7 @@ export class ItemsServices {
   async editItem(itemId: number, editItemDto: EditItemDto) {
     const item = await this.findByid(itemId);
     Object.assign(item, editItemDto);
+    item.totalPrice = item.pricePerUnit * item.quantity;
     return await this.itemRepository.save(item);
   }
 
